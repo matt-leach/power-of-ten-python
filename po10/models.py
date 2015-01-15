@@ -12,6 +12,7 @@ class Athlete(Model):
     county = None
     region = None
     nation = None
+    date_of_birth = None
     
     def __repr__(self):
         return "< Athlete: %s >" % self.name
