@@ -16,23 +16,13 @@ class Client(object):
         a = Athlete()
         
         name = soup.find_all(class_="athleteprofilesubheader")[0].h2.string.strip()
-        
         a.name = name
         
         info = soup.find(id="ctl00_cphBody_pnlAthleteDetails").find_all('table')[2]    
         
-        attrs_dict = {"Gender:": "gender", "Club:": "clubs", "Age Group:": "age_group", "Date of Birth:": "date_of_birth",
-                      "Region:": "region", "County:": "county", "Nation:": "nation"}
+        extra_details = {row.find_all("td")[0].string: row.find_all("td")[1].string for row in info.find_all("tr")}
         
-        for row in info.find_all("tr"):
-            name = row.find_all("td")[0].string
-            value = row.find_all("td")[1].string
-            try:
-                setattr(a, attrs_dict[name], value)
-            except Exception as e:
-                print e
-                print "cannot set", name, value
-                pass
+        a.import_data(extra_details)
            
         try: 
             coach = soup.find(id="ctl00_cphBody_pnlAthleteDetails").find_all('table')[3].find("a").string
