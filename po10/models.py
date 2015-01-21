@@ -1,19 +1,31 @@
 from schematics import models
-from schematics import types
+from schematics.types import StringType, IntType
+from schematics.types.compound import ListType, ModelType
+
+
+
 
 
 class Athlete(models.Model):
-    name = types.StringType()
-    coach = types.StringType()
-    clubs = types.StringType(serialized_name='Club:')
-    gender = types.StringType(serialized_name='Gender:')
-    age_group = types.StringType(serialized_name='Age Group:')
-    county = types.StringType(serialized_name='County:')
-    region = types.StringType(serialized_name='Region:')
-    nation = types.StringType(serialized_name='Nation:')
-    date_of_birth = types.StringType(serialized_name='Date of Birth:')
+    id = IntType()
+    name = StringType()
+    coach = StringType()
+    clubs = StringType(serialized_name='Club:')
+    gender = StringType(serialized_name='Gender:')
+    age_group = StringType(serialized_name='Age Group:')
+    county = StringType(serialized_name='County:')
+    region = StringType(serialized_name='Region:')
+    nation = StringType(serialized_name='Nation:')
+    date_of_birth = StringType(serialized_name='Date of Birth:')
     
     def __repr__(self):
         return "< Athlete: %s >" % self.name
-    
+
+
+class Ranking(models.Model):
+    rank = IntType()
+    time = StringType() # needs to change
+    athlete = ModelType(Athlete)
+    venue = StringType()
+    date = StringType() # Again needs to change
     
