@@ -19,7 +19,7 @@ class Athlete(models.Model):
     date_of_birth = StringType(serialized_name='Date of Birth:')
     
     def __repr__(self):
-        return "< Athlete: %s >" % self.name
+        return u"< Athlete: %s >" % self.name
 
 
 class Ranking(models.Model):
@@ -28,4 +28,10 @@ class Ranking(models.Model):
     athlete = ModelType(Athlete)
     venue = StringType()
     date = StringType() # Again needs to change
+    event = StringType()
+    year = StringType()
+    age_group = StringType()
+    
+    def __repr__(self):
+        return '< Ranking: {0} {1} {2} {3} {4}>'.format(self.rank, self.time, self.athlete.name, self.event, self.year)
     

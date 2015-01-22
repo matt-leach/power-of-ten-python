@@ -15,7 +15,7 @@ class Client(object):
         
         a = Athlete({"id": id})
         
-        name = soup.find_all(class_="athleteprofilesubheader")[0].h2.string.strip()
+        name = soup.find_all(class_="athleteprofilesubheader")[0].h2.string.strip().encode("utf-8")
         a.name = name
         
         info = soup.find(id="ctl00_cphBody_pnlAthleteDetails").find_all('table')[2]    
@@ -25,7 +25,7 @@ class Client(object):
         a.import_data(extra_details)
            
         try: 
-            coach = soup.find(id="ctl00_cphBody_pnlAthleteDetails").find_all('table')[3].find("a").string
+            coach = soup.find(id="ctl00_cphBody_pnlAthleteDetails").find_all('table')[3].find("a").string.encode("utf-8")
             coach_url = soup.find(id="ctl00_cphBody_pnlAthleteDetails").find_all('table')[3].find("a").get('href')
             
             a.coach = coach
@@ -35,9 +35,9 @@ class Client(object):
         return a
     
     
-    def get_ranking(self, event="10K", sex="M", year="2014", agegroup="ALL"):
+    def get_ranking(self, event="10K", sex="M", year="2014", age_group="ALL"):
         
-        r = requests.get("http://www.thepowerof10.info/rankings/rankinglist.aspx", params={"event": event, "agegroup": agegroup, "sex": sex, "year": 2014})
+        r = requests.get("http://www.thepowerof10.info/rankings/rankinglist.aspx", params={"event": event, "agegroup": age_group, "sex": sex, "year": 2014})
         
         soup = BeautifulSoup(r.content)
         rankings_table = soup.find(id="ctl00_cphBody_lblCachedRankingList").find_all('table')[0]
@@ -48,10 +48,11 @@ class Client(object):
         for row in ranking_rows:
             if row.find_all("td")[0].string is None:
                 continue
-            r = Ranking({"athlete": Athlete()})
+            r = Ranking({"athlete": Athlete(), "event": event, "year": year, "age_group": age_group})
             r.rank = int(row.find_all("td")[0].string)
             r.time = row.find_all("td")[1].string
-            r.athlete.name = row.find_all("td")[6].string
+            r.athlete.name = row.find_all("td")[6].string.encode("utf-8")
+            r.athlete.id = int(row.find_all("td")[6].a["href"].split("=")[1])
             r.venue = row.find_all("td")[11].string
             r.date = row.find_all("td")[12].string
             
