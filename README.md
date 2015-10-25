@@ -1,4 +1,4 @@
 powerOfTenParser
 ================
 
-Scrapes the power of 10 website, providing a 'fake API'.
+Scrapes the power of 10 website, providing an API.
